@@ -81,6 +81,19 @@ class PdoGsb
         }
         return self::$instance;
     }
+    
+    public function getMetier($login, $mdp): array
+    {
+        $requetePrepare = $this->connexion->prepare(
+                'SELECT login.metier '
+                . 'FROM login '
+                . 'WHERE login.login = :unLogin AND login.mdp = :unMdp'
+        );
+        $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':unMdp', $mdp, PDO::PARAM_STR);
+        $requetePrepare->execute();
+        return $requetePrepare->fetch();
+    }
 
     /**
      * Retourne les informations d'un visiteur
@@ -92,12 +105,29 @@ class PdoGsb
      */
     public function getInfosVisiteur($login, $mdp): array
     {
+        $metier = $this->getMetier($login, $mdp);
+        if($metier[metier] === 'VIS'){
         $requetePrepare = $this->connexion->prepare(
             'SELECT visiteur.id AS id, visiteur.nom AS nom, '
             . 'visiteur.prenom AS prenom '
             . 'FROM visiteur '
-            . 'WHERE visiteur.login = :unLogin AND visiteur.mdp = :unMdp'
+            . 'INNER JOIN login '
+            . 'ON visiteur.idlogin = login.id '   
+            . 'WHERE login.login = :unLogin AND login.mdp = :unMdp'
         );
+        
+        }
+        elseif ($metier[metier] === 'COM') {
+            $requetePrepare = $this->connexion->prepare(
+            'SELECT comptable.id AS id, comptable.nom AS nom, '
+            . 'comptable.prenom AS prenom '
+            . 'FROM comptable '
+            . 'INNER JOIN login '
+            . 'ON comptable.idlogin = login.id '   
+            . 'WHERE login.login = :unLogin AND login.mdp = :unMdp'
+        );
+            
+        }
         $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);
         $requetePrepare->bindParam(':unMdp', md5($mdp), PDO::PARAM_STR);
         $requetePrepare->execute();
