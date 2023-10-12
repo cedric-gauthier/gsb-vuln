@@ -98,6 +98,7 @@ class PdoGsb
     /**
      * Retourne les informations d'un visiteur
      *
+     * 
      * @param String $login Login du visiteur
      * @param String $mdp   Mot de passe du visiteur
      *
