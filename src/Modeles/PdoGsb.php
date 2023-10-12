@@ -107,7 +107,7 @@ class PdoGsb
     {
         $requetePrepare = $this->connexion->prepare(
             'SELECT visiteur.id AS id, visiteur.nom AS nom, '
-            . 'visiteur.prenom AS prenom '
+            . 'visiteur.prenom AS prenom, login.metier AS metier '
             . 'FROM visiteur '
             . 'INNER JOIN login '
             . 'ON visiteur.idlogin = login.id '   
@@ -123,7 +123,7 @@ class PdoGsb
     public function getInfosComptable($login, $mdp) {
             $requetePrepare = $this->connexion->prepare(
             'SELECT comptable.id AS id, comptable.nom AS nom, '
-            . 'comptable.prenom AS prenom '
+            . 'comptable.prenom AS prenom, login.metier AS metier '
             . 'FROM comptable '
             . 'INNER JOIN login '
             . 'ON comptable.idlogin = login.id '   

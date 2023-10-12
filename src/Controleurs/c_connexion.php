@@ -43,7 +43,8 @@ switch ($action) {
             $id = $user['id'];
             $nom = $user['nom'];
             $prenom = $user['prenom'];
-            Utilitaires::connecter($id, $nom, $prenom);
+            $metier = $user['metier'] === 'COM';
+            Utilitaires::connecter($id, $nom, $prenom, $metier);
             header('Location: index.php');
         }
         break;
