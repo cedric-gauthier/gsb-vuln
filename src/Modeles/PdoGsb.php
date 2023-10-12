@@ -85,12 +85,12 @@ class PdoGsb
     public function getMetier($login, $mdp): array
     {
         $requetePrepare = $this->connexion->prepare(
-                'SELECT login.metier '
+                'SELECT login.id, login.metier '
                 . 'FROM login '
                 . 'WHERE login.login = :unLogin AND login.mdp = :unMdp'
         );
         $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);
-        $requetePrepare->bindParam(':unMdp', $mdp, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':unMdp', hash('sha256',$mdp), PDO::PARAM_STR);
         $requetePrepare->execute();
         return $requetePrepare->fetch();
     }
@@ -98,40 +98,39 @@ class PdoGsb
     /**
      * Retourne les informations d'un visiteur
      *
-     * 
      * @param String $login Login du visiteur
      * @param String $mdp   Mot de passe du visiteur
      *
-     * 
      * @return l'id, le nom et le prénom sous la forme d'un tableau associatif
      */
-    public function getInfosVisiteur($login, $mdp): array
+    public function getInfosVisiteur($login, $mdp): array | bool
     {
-        $metier = $this->getMetier($login, $mdp);
-        if($metier[metier] === 'VIS'){
         $requetePrepare = $this->connexion->prepare(
             'SELECT visiteur.id AS id, visiteur.nom AS nom, '
             . 'visiteur.prenom AS prenom '
             . 'FROM visiteur '
             . 'INNER JOIN login '
             . 'ON visiteur.idlogin = login.id '   
-            . 'WHERE login.login = :unLogin AND login.mdp = :unMdp'
+            . 'WHERE login.login = :unLogin AND login.mdp = :unMdp '
         );
+        $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':unMdp', hash('sha256', $mdp), PDO::PARAM_STR);
+        $requetePrepare->execute();
+        return $requetePrepare->fetch();
         
-        }
-        elseif ($metier[metier] === 'COM') {
+    }
+    
+    public function getInfosComptable($login, $mdp) {
             $requetePrepare = $this->connexion->prepare(
             'SELECT comptable.id AS id, comptable.nom AS nom, '
             . 'comptable.prenom AS prenom '
             . 'FROM comptable '
             . 'INNER JOIN login '
             . 'ON comptable.idlogin = login.id '   
-            . 'WHERE login.login = :unLogin AND login.mdp = :unMdp'
+            . 'WHERE login.login = :unLogin AND login.mdp = :unMdp '
         );
-            
-        }
         $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);
-        $requetePrepare->bindParam(':unMdp', md5($mdp), PDO::PARAM_STR);
+        $requetePrepare->bindParam(':unMdp', hash('sha256', $mdp), PDO::PARAM_STR);
         $requetePrepare->execute();
         return $requetePrepare->fetch();
     }

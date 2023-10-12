@@ -379,23 +379,3 @@ function majFicheFrais($pdo)
     }
 }
 
-
-function allPasswordToHash(){
-    $requetePrepare = $this->connexion->prepare(
-        'SELECT visiteur.id AS id, visiteur.mdp AS mdp'
-        . 'FROM visiteur ');
-    $requetePrepare->execute();
-
-    foreach ($requetePrepare->fetch() as $user){
-        $id = $user[0];
-        $mdp = $user[1];
-        $hashMdp = password_hash($mdp, PASSWORD_DEFAULT);
-        $req = $pdo->prepare('UPDATE visiteur SET mdp= :hashMdp  WHERE id= :id ');
-        $req->bindParam(':id', $id, PDO::PARAM_STR);
-        $req->bindParam(':hashMdp', $hashMdp, PDO::PARAM_STR);
-
-        $req->execute();
-    }
-    
-}
-
