@@ -99,11 +99,11 @@ class PdoGsb
             . 'WHERE visiteur.login = :unLogin AND visiteur.mdp = :unMdp'
         );
         $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);
-        $requetePrepare->bindParam(':unMdp', $mdp, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':unMdp', md5($mdp), PDO::PARAM_STR);
         $requetePrepare->execute();
         return $requetePrepare->fetch();
     }
-
+    
     /**
      * Retourne sous forme d'un tableau associatif toutes les lignes de frais
      * hors forfait concernées par les deux arguments.
