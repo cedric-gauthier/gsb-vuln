@@ -211,6 +211,12 @@ INSERT INTO `login` VALUES (1,'p.ayot','xiej3uuY0','VIS'),(2,'v.artois','xie2IY8
 /*!40000 ALTER TABLE `login` ENABLE KEYS */;
 UNLOCK TABLES;
 
+ALTER TABLE login
+MODIFY mdp CHAR(64) ;
+
+UPDATE login
+   SET mdp = sha2(mdp, 256);
+
 --
 -- Table structure for table `visiteur`
 --
