@@ -3,10 +3,17 @@
 use Outils\Utilitaires;
 
 $action = filter_input(INPUT_GET, 'action', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-$idVisiteur = $_SESSION['idVisiteur'];
 switch ($action) {
     case 'listeVisiteur':
-        $lesMois = $pdo->getLesMoisDisponibles($idVisiteur);
+        $idVisiteur = $pdo->getIdVisiteur();
+        // Afin de sélectionner par défaut le dernier mois dans la zone de liste
+        // on demande toutes les clés, et on prend la première,
+        // les mois étant triés décroissants
+        include PATH_VIEWS . 'v_listeVisiteur.php';
+        break;
+    case 'moisVisiteur':
+        $idVisiteur = $pdo->getIdVisiteur();
+        $lesMois = $pdo->getLesMoisDisponibles($idVisiteur[1]);
         // Afin de sélectionner par défaut le dernier mois dans la zone de liste
         // on demande toutes les clés, et on prend la première,
         // les mois étant triés décroissants
@@ -15,3 +22,4 @@ switch ($action) {
         include PATH_VIEWS . 'v_listeVisiteur.php';
         break;
 }
+

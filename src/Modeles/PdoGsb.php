@@ -135,6 +135,16 @@ class PdoGsb
         return $requetePrepare->fetch();
     }
     
+    public function getIdVisiteur() 
+    {
+        $requetePrepare = $this->connexion->prepare(
+            'SELECT visiteur.id AS id '
+            . 'FROM visiteur '
+        );
+        $requetePrepare->execute();
+        return $requetePrepare->fetch();
+    }
+    
     /**
      * Retourne sous forme d'un tableau associatif toutes les lignes de frais
      * hors forfait concernées par les deux arguments.
