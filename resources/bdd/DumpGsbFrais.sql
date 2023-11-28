@@ -1,5 +1,11 @@
-CREATE DATABASE  IF NOT EXISTS `gsb_frais` /*!40100 DEFAULT CHARACTER SET utf8mb3 */;
-USE `gsb_frais`;
+CREATE DATABASE  IF NOT EXISTS gsb_vuln
+DEFAULT CHARACTER SET utf8
+DEFAULT COLLATE utf8_general_ci;
+CREATE USER IF NOT EXISTS 'userGsb'@'localhost' IDENTIFIED BY 'secret';
+GRANT SHOW DATABASES ON *.* TO 'userGsb'@'localhost';
+GRANT ALL PRIVILEGES ON `gsb_vuln`.* TO userGsb@localhost;
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+USE `gsb_vuln`;
 -- MariaDB dump 10.19  Distrib 10.6.5-MariaDB, for Win64 (AMD64)
 --
 -- Host: localhost    Database: gsb_frais

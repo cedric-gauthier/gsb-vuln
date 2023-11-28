@@ -24,10 +24,15 @@ abstract class Utilitaires
      *
      * @return vrai ou faux
      */
-    public static function estConnecte(): bool
+    public static function estConnecte()
     {
-        return isset($_SESSION['idVisiteur']);
+    return isset($_SESSION['idVisiteur']) && isset($_SESSION['codeA2f']);
     }
+    
+    public static function connecterA2f($code)
+{
+    $_SESSION['codeA2f'] = $code;
+}
 
     /**
      * Enregistre dans une variable session les infos d'un visiteur
